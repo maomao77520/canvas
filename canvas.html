@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style type="text/css">
+    div{ border: 1px solid gray; display: inline-block;}   
+</style>
+</head>
+<body>
+<div>
+    <canvas id="canva" width="500" height="300"></canvas>
+</div>
+
+
+<script type="text/javascript">
+window.onload = function(){
+   var canvas = document.getElementById("canva");
+   var context = canvas.getContext("2d");
+
+   function drawPie(context,data,labels,colors){
+    for(var total=0,i=0,len=data.length; i<len; i++){   //累计data的值，计算总数（分母）
+    	total += data[i];
+    } 
+
+    var startangle = -Math.PI/2;
+    for(var n=0; n<data.length; n++){     //遍历每个data元素，画出其在饼状图中占据的位置
+    	context.beginPath();             //每次定义新的路径，若没有，之后添加的路径会添加到已有路径之上，即n++之后会将之前路径一起绘制（覆盖）
+    	context.moveTo(150,150);
+    	console.log(startangle/2/Math.PI*360);
+    	context.arc(150,150,100,startangle,startangle+data[n]/total*2*Math.PI,false);  //接收的参数：圆心x，y，r，开始的角度，结束的角度，顺时针
+    	context.fillStyle = colors[n];
+    	context.fill();
+    	context.closePath();
+    	startangle += data[n]/total*2*Math.PI;
+    }
+
+    for(var j=0; j<labels.length; j++){   //右侧的文字标签信息
+    	context.fillStyle = colors[j];
+    	context.fillRect(300,100+j*20,10,10);
+    	context.font = "10px Georgia";
+    	context.fillText(labels[j],320,110+j*20);
+    }
+   }    
+
+   drawPie(context,[120,43,97,102,25],["Japan","American","England","France","China"],["orange","blue","gray","yellow","red"]); 
+}
+  
+
+</script>
+</body>
+</html>
