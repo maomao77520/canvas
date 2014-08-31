@@ -1,0 +1,87 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=gb2312" />
+<title>test</title>
+<style type="text/css">
+div{ border:1px solid gray; width: 600px;}
+</style>
+</head>
+
+<body>
+<div id="wrap">
+<canvas id="canvas" width="600" height="400"></canvas>
+</div>
+
+<script type="text/javascript">
+var canvas = document.getElementById("canvas");
+var context = canvas.getContext("2d");
+
+function Bar(context,data,Xtitle){
+	this.data = data;
+	this.Xtitle = Xtitle;
+	this.totalbar = this.data.length;
+	this.width = context.canvas.clientWidth;
+	this.height = context.canvas.clientHeight;
+	this.pointOX = 30;
+	this.pointOY = this.height-30;
+	this.xInterval = Math.floor((this.width-60) / (this.data.length+1));
+	this.halfWidth = this.xInterval > 60 ? 20:this.xInterval-20;
+	this.maxData = this.getMaxdata();
+	this.maxHeight = 60;
+	this.pointArray = [];
+
+}
+    Bar.prototype.getMaxdata = function(){
+        return Math.max.apply(Math,this.data);
+    }
+    Bar.prototype.drawXLine = function(){ 
+        context.beginPath();
+        context.moveTo(this.pointOX,this.pointOY);
+        context.lineTo(this.pointOX + this.width - 60,this.pointOY);
+        context.stroke();
+        for(var i=0,start=this.pointOX+this.xInterval; i<this.data.length; i++,start+=this.xInterval){
+        	this.pointArray.push(start);
+        	context.beginPath();
+        	context.moveTo(start,this.pointOY);
+            context.lineTo(start,this.pointOY+5);
+            context.stroke();
+        }
+    }
+    Bar.prototype.drawYLine = function(){//画Y轴
+        context.beginPath();
+        context.moveTo(this.pointOX,this.pointOY);
+        context.lineTo(this.pointOX,this.pointOY - this.height +60);
+        context.stroke();
+         
+    }
+
+    Bar.prototype.drawColumn = function(){//画柱子
+
+    	for(var i=0; i<this.data.length; i++){
+    		var height = this.data[i]/this.maxData * (this.pointOY-this.maxHeight);
+    		console.log(this.data[i]+","+this.maxData);
+    		context.beginPath();
+            context.fillStyle = "#AEDAF5";
+            context.fillRect(this.pointArray[i]-this.halfWidth+1,this.pointOY-height+1,2*this.halfWidth-2,height-2);
+            context.textAlign = "center";
+            context.fillStyle = "#999";
+            context.fillText(this.data[i],this.pointArray[i], this.pointOY-height-10);
+            
+    	}
+
+    }
+    Bar.prototype.draw = function(){
+        this.drawXLine();
+        this.drawYLine();
+        this.drawColumn();
+    }
+
+
+
+var bar = new Bar(context,[212,568,120,321,109,301],["Japan","America","France","China","England","Brazil"]);
+console.log(bar.data);
+bar.draw();
+</script>
+</body>
+</html>
