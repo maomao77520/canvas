@@ -1,0 +1,68 @@
+//canvas实现时钟效果
+<!DOCTYPE html>
+<html>
+<head>
+	<style type="text/css">
+       canvas{ border: 2px solid black; margin:0 auto;display: block;}
+	</style>
+</head>
+<body>
+<canvas id="canvas" width="600" height="478"></canvas>
+<script type="text/javascript">
+var canvas = document.getElementById("canvas");
+var context = canvas.getContext('2d');
+
+
+
+
+function drawClock(){
+	context.clearRect(0, 0, canvas.width, canvas.height);
+    var img = new Image();
+    img.src = "backgroundimg.jpg";
+    context.drawImage(img,0,0);
+		//画表盘面
+	context.beginPath();
+	context.arc(300,239,200,0,360);
+	context.lineWidth = 6;
+	context.stroke();
+    //画表盘的刻度，将坐标原点设在圆心处，每次旋转画布30度，画刻度12位置的刻度，
+    for(var i=1; i<13; i++){
+    	context.save();
+    	context.translate(300,239);//原点在圆心位置
+    	context.rotate(30*Math.PI/180*i);
+    	context.beginPath();
+    	context.moveTo(0,-200);
+    	context.lineTo(0,-187);
+    	context.stroke();
+    	context.textAlign = 'center';
+    	context.font = 'italic bold 18px serif';
+    	context.fillStyle = "orange";
+    	context.fillText((i+13)%13,0,-172);
+    	context.closePath();
+    	context.restore();
+    }
+
+    var now = new Date();
+    var second = now.getSeconds();
+    var minute = now.getMinutes();
+    var hour = now.getHours();
+    hour = hour > 12 ? hour-12 : hour;
+
+    //秒针
+    var degree = second*6*Math.PI/180;  
+    context.save();
+    context.translate(300,239);
+    context.rotate(degree);
+    context.beginPath();
+    context.moveTo(0,0);
+    context.lineTo(0,-150);
+    context.lineWidth = 2;
+    context.stroke();
+    context.closePath();
+    context.restore();
+}
+
+	setInterval(drawClock,1000);
+</script>
+</body>
+</html>
