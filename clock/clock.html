@@ -24,28 +24,42 @@ function drawClock(){
 		//画表盘面
 	context.beginPath();
 	context.arc(300,239,200,0,360);
-	context.lineWidth = 6;
-	context.stroke();
+	context.lineWidth = 20;
+    context.fillStyle = 'rgba(240,234,202,0.5)';
+    context.fill();
+    context.strokeStyle = "rgb(76,40,26)";
+    context.stroke();
     context.closePath();
-    context.beginPath();
-    context.arc(300,239,5,0,360);
-    context.fillStyle = "black";
+
+    context.beginPath();//圆心的原点
+    context.arc(300,239,7,0,360);
+    context.fillStyle = "#343434";
     context.fill();
     //画表盘的刻度，将坐标原点设在圆心处，每次旋转画布30度，画刻度12位置的刻度，
-    for(var i=1; i<13; i++){
-    	context.save();
-    	context.translate(300,239);//原点在圆心位置
-    	context.rotate(30*Math.PI/180*i);
-    	context.beginPath();
-    	context.moveTo(0,-200);
-    	context.lineTo(0,-187);
-    	context.stroke();
-    	context.textAlign = 'center';
-    	context.font = 'italic bold 18px serif';
-    	context.fillStyle = "orange";
-    	context.fillText((i+13)%13,0,-172);
-    	context.closePath();
-    	context.restore();
+    for(var i=1; i<=60; i++){
+        context.save();
+        context.translate(300,239);//原点在圆心位置
+        context.rotate(6*Math.PI/180*i);
+        context.beginPath();
+        context.moveTo(0,-200);
+        if(i%5 == 0){
+            context.lineTo(0,-177); 
+            context.lineWidth = 5;
+            context.stroke();
+            context.textAlign = 'center';
+            context.font = 'italic bold 20px serif';
+            context.fillStyle = "#343434";
+            context.fillText(i/5,0,-155);
+        }else{
+            context.lineWidth = 2;
+            context.lineTo(0,-185);
+            context.stroke();
+            
+        }
+       
+       
+        context.closePath();
+        context.restore();
     }
 
     var now = new Date();
@@ -65,6 +79,7 @@ function drawClock(){
     context.moveTo(0,0);
     context.lineTo(0,-150);
     context.lineWidth = 2;
+    context.strokeStyle = "#343434";
     context.stroke();
     context.closePath();
     context.restore();
@@ -77,8 +92,9 @@ function drawClock(){
     context.beginPath();
     context.moveTo(0,0);
     context.lineTo(0,-130);
-    context.lineWidth = 4;
+    context.lineWidth = 5;
     context.lineCap = 'round';
+    context.strokeStyle = "#343434";
     context.stroke();
     context.closePath();
     context.restore();
@@ -90,9 +106,10 @@ function drawClock(){
     context.rotate(hdegree);
     context.beginPath();
     context.moveTo(0,0);
-    context.lineTo(0,-100);
-    context.lineWidth = 6;
+    context.lineTo(0,-90);
+    context.lineWidth = 8;
     context.lineCap = 'round';
+    context.strokeStyle = "#343434";
     context.stroke();
     context.closePath();
     context.restore();
